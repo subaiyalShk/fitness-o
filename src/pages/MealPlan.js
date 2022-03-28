@@ -104,12 +104,13 @@ export default function MenuPage() {
                 index={value}
                 onChangeIndex={handleChangeIndex}
             >
-              <p>page 1</p>
               <DailyMeals/>
-              <p>page 3</p>
-              <p>page 4</p>
-              <p>page 5</p>
-              <p>page 6</p>
+              <DailyMeals/>
+              <DailyMeals/>
+              <DailyMeals/>
+              <DailyMeals/>
+              <DailyMeals/>
+              <DailyMeals/>
             </SwipeableViews>
         </Box>
     );

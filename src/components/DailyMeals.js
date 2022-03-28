@@ -7,34 +7,40 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import MealSelect from './MealSelect'
-
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData('Breakfast', 159, 6.0, 24, 4.0),
-  createData('Lunch', 237, 9.0, 37, 4.3),
-  createData('Dinner', 262, 16.0, 24, 6.0),
-];
+import {MenuData} from '../Data/MenuData'
 
 
 
-export default function BasicTable() {
+
+export default function DailyMeals() {
+      
+    const menu = [
+        {name:'Breakfast', meals:MenuData.breakfast},
+        {name:'Lunch', meals:MenuData.lunch},
+        {name:'Dinner', meals:MenuData.dinner},
+    ];
+
+    const onChangeHandler = (newMeal) =>{
+        console.log(newMeal)
+    }
+
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ width: '100%' }} aria-label="simple table">
         
         <TableBody>
-          {rows.map((row) => (
+          {menu.map((item) => (
             <TableRow
-              key={row.name}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 }, height:"100px" }}
+              key={item.name}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 }, height:"150px" }}
             >
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right"><MealSelect/></TableCell>
+                <TableCell component="th" scope="row">
+                    {item.name}
+                </TableCell>
+                <TableCell align="right">
+                    <MealSelect onChangeHandler={onChangeHandler} meals={item.meals}/>
+                </TableCell>
             </TableRow>
           ))}
         </TableBody>
