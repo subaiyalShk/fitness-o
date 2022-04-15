@@ -9,33 +9,27 @@ import KitchenIcon from '@mui/icons-material/Kitchen';
 import Paper from '@mui/material/Paper';
 import MenuPage from '../pages/MenuPage'
 import MealPlan from '../pages/MealPlan'
+import { PropaneSharp } from '@mui/icons-material';
 
-export default function FixedBottomNavigation() {
-  const [value, setValue] = React.useState(0);
+export default function FixedBottomNavigation(props) {
+  const {children, page, setPage} = props;
   const ref = React.useRef(null);
 
 
   React.useEffect(() => {
     ref.current.ownerDocument.body.scrollTop = 0;
-  }, [value]);
-
-  const renderPage = () => {
-    if (value == 0) (<MenuPage/>)
-    else if (value == 1) (<MealPlan/>)
-  }
+  }, [page]);
 
   return (
     <Box sx={{ pb: 7 }} ref={ref}>
       <CssBaseline/>
-      { 
-        value == 0? (<MenuPage/>) : (<MealPlan/>)     
-      }
+      {children}
       <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
         <BottomNavigation
           showLabels
-          value={value}
-          onChange={(event, newValue) => {
-            setValue(newValue);
+          value={page}
+          onChange={(event, nextPage) => {
+            setPage(nextPage);
           }}
         >
           <BottomNavigationAction label="Menu" icon={<MenuBookIcon />} />

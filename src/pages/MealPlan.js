@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import SwipeableViews from 'react-swipeable-views';
 import { useTheme } from '@mui/material/styles';
@@ -12,8 +12,10 @@ import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
-import {MenuData} from '../Data/MenuData'
-import DailyMeals from '../components/DailyMeals'
+import ScheduleMeals from '../components/ScheduleMeals'
+import DisplayMeals from '../components/DisplayMeals'
+import EditButton from '../components/EditButton'
+import { AppCTX } from '../Data/AppData'
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -48,9 +50,11 @@ function a11yProps(index) {
     };
 }
 
-export default function MenuPage() {
+export default function MealPlanPage() {
     const theme = useTheme();
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = useState(0);
+    const [editing, setEditing] = useState(true)
+    const { mealPlan, menu } = useContext(AppCTX);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -60,24 +64,6 @@ export default function MenuPage() {
         setValue(index);
     };
 
-    const MenuList = (props) => {
-        const {items, idx} = props;
-
-        return(
-            <TabPanel value={value} index={idx} dir={theme.direction}>
-                <List>
-                    {items.map(({ primary, secondary, person }, index) => (
-                    <ListItem button key={index + person}>
-                        <ListItemAvatar>
-                        <Avatar alt="Profile Picture" src={person} />
-                        </ListItemAvatar>
-                        <ListItemText primary={primary} secondary={secondary} />
-                    </ListItem>
-                    ))}
-                </List>
-            </TabPanel>
-        )
-    }   
 
     return (
         <Box sx={{ bgcolor: 'background.paper', width: '100%' }}>
@@ -104,14 +90,9 @@ export default function MenuPage() {
                 index={value}
                 onChangeIndex={handleChangeIndex}
             >
-              <DailyMeals/>
-              <DailyMeals/>
-              <DailyMeals/>
-              <DailyMeals/>
-              <DailyMeals/>
-              <DailyMeals/>
-              <DailyMeals/>
+              {editing?<ScheduleMeals meals={menu}/>:<DisplayMeals meals={menu} />}
             </SwipeableViews>
+            <EditButton editing={editing} setEditing={setEditing}/>
         </Box>
     );
 

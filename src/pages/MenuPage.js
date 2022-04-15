@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import SwipeableViews from 'react-swipeable-views';
 import { useTheme } from '@mui/material/styles';
@@ -12,10 +12,12 @@ import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
-import {MenuData} from '../Data/MenuData'
+import AddBtn from '../components/AddButton'
+import { AppCTX } from '../Data/AppData'
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
+   
 
     return (
         <div
@@ -49,7 +51,8 @@ function a11yProps(index) {
 
 export default function MenuPage() {
     const theme = useTheme();
-    const [value, setValue] = React.useState(0);
+    const { menu } = useContext(AppCTX);
+    const [value, setValue] = useState(0);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -99,9 +102,10 @@ export default function MenuPage() {
                 index={value}
                 onChangeIndex={handleChangeIndex}
             >
-                <MenuList items={MenuData.breakfast} idx={0} />
-                <MenuList items={MenuData.lunch} idx={1} />
-                <MenuList items={MenuData.dinner} idx={2} />
+                <MenuList items={menu.breakfast} idx={0} />
+                <MenuList items={menu.lunch} idx={1} />
+                <MenuList items={menu.dinner} idx={2} />
+                <AddBtn/>
             </SwipeableViews>
         </Box>
     );

@@ -7,17 +7,19 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import MealSelect from './MealSelect'
-import {MenuData} from '../Data/MenuData'
 
 
 
 
-export default function DailyMeals() {
-      
+
+export default function ScheduleMeals(props) {
+    const { meals } = props;
+
+    console.log(meals)
     const menu = [
-        {name:'Breakfast', meals:MenuData.breakfast},
-        {name:'Lunch', meals:MenuData.lunch},
-        {name:'Dinner', meals:MenuData.dinner},
+        {name:'Breakfast', meals:meals.breakfast},
+        {name:'Lunch', meals:meals.lunch},
+        {name:'Dinner', meals:meals.dinner},
     ];
 
     const onChangeHandler = (newMeal) =>{
