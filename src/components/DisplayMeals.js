@@ -1,81 +1,35 @@
 import * as React from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import MealSelect from './MealSelect'
-
-
-
-
-
-export default function ScheduleMeals(props) {
-    const { meals } = props;
-
-    console.log(meals)
-    const menu = [
-        {name:'Breakfast', meals:meals.breakfast},
-        {name:'Lunch', meals:meals.lunch},
-        {name:'Dinner', meals:meals.dinner},
-    ];
-
-    const onChangeHandler = (newMeal) =>{
-        console.log(newMeal)
-    }
-
-
-  return (
-    <TableContainer component={Paper}>
-      <Table sx={{ width: '100%' }} aria-label="simple table">
-        
-        <TableBody>
-          {menu.map((item) => (
-            <TableRow
-              key={item.name}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 }, height:"150px" }}
-            >
-                <TableCell component="th" scope="row">
-                    {item.name}
-                </TableCell>
-                <TableCell align="right">
-                    <MealSelect onChangeHandler={onChangeHandler} meals={item.meals}/>
-                </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
-}
-
-
-import * as React from 'react';
 import ListSubheader from '@mui/material/ListSubheader';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
-import SendIcon from '@mui/icons-material/Send';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
+import ImageIcon from '@mui/icons-material/Image';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import StarBorder from '@mui/icons-material/StarBorder';
+import Divider from '@mui/material/Divider';
+import NutritionDetails from './NutritionDetails'
 
-export default function NestedList() {
-  const [open, setOpen] = React.useState(true);
+export default function DisplayMeals(props) {
+  const [open, setOpen] = React.useState(false);
+  const [breakfastDetails, openBreakfastDetails] = React.useState(false);
+  const [lunchDetails, openLunchDetails] = React.useState(false);
+  const [dinnerDetails, openDinnerDetails] = React.useState(false);
+
+  const { mealPlan } = props;
+  console.log(mealPlan)
 
   const handleClick = () => {
     setOpen(!open);
   };
 
-  return (
+return (
     <List
-      sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+      sx={{ width: '100%', bgcolor: 'background.paper' }}
       component="nav"
       aria-labelledby="nested-list-subheader"
       subheader={
@@ -84,24 +38,63 @@ export default function NestedList() {
         </ListSubheader>
       }
     >
-      
-      <ListItemButton onClick={handleClick}>
-        <ListItemIcon>
-          <InboxIcon />
-        </ListItemIcon>
-        <ListItemText primary="Inbox" />
-        {open ? <ExpandLess /> : <ExpandMore />}
-      </ListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }}>
-            <ListItemIcon>
-              <StarBorder />
-            </ListItemIcon>
-            <ListItemText primary="Starred" />
-          </ListItemButton>
+        {/* Breakfast */}
+        <ListItemButton onClick={()=>openBreakfastDetails(!breakfastDetails)}>
+            <ListItemAvatar>
+                <Avatar>
+                    <ImageIcon />
+                </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary={mealPlan?.breakfast} secondary="Breakfast"/>
+            {breakfastDetails ? <ExpandLess/> : <ExpandMore />}
+        </ListItemButton>
+        <Collapse in={breakfastDetails} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+            <ListItemButton sx={{ pl: 4 }}>
+                <NutritionDetails/>
+            </ListItemButton>
+            </List>
+        </Collapse>
+        <Divider variant="inset" component="li" />
+
+        {/* Lunch */}
+        <ListItemButton onClick={()=>openLunchDetails(!lunchDetails)}>
+            <ListItemAvatar>
+                <Avatar>
+                    <ImageIcon />
+                </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary={mealPlan?.lunch} secondary="Lunch" />
+            {lunchDetails ? <ExpandLess /> : <ExpandMore />}
+        </ListItemButton>
+        <Collapse in={lunchDetails} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+            <ListItemButton sx={{ pl: 4 }}>
+                <NutritionDetails/>
+            </ListItemButton>
+            </List>
+        </Collapse>
+        <Divider variant="inset" component="li" />
+
+        {/* Dinner */}
+        <ListItemButton onClick={()=>openDinnerDetails(!dinnerDetails)}>
+            <ListItemAvatar>
+                <Avatar>
+                    <ImageIcon />
+                </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary={mealPlan?.dinner} secondary="Dinner" />
+            {dinnerDetails ? <ExpandLess/> : <ExpandMore />}
+        </ListItemButton>
+        <Collapse in={dinnerDetails} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+            <ListItemButton sx={{ pl: 4 }}>
+                <NutritionDetails/>
+            </ListItemButton>
+            </List>
+        </Collapse>
+        <Divider variant="inset" component="li" />
+        
         </List>
-      </Collapse>
-    </List>
-  );
+    );
 }

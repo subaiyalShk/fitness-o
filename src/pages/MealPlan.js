@@ -7,11 +7,6 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemText from '@mui/material/ListItemText';
-import Avatar from '@mui/material/Avatar';
 import ScheduleMeals from '../components/ScheduleMeals'
 import DisplayMeals from '../components/DisplayMeals'
 import EditButton from '../components/EditButton'
@@ -52,9 +47,10 @@ function a11yProps(index) {
 
 export default function MealPlanPage() {
     const theme = useTheme();
-    const [value, setValue] = useState(0);
-    const [editing, setEditing] = useState(true)
+    const [ value, setValue ] = useState(0);
+    const [ editing, setEditing ] = useState(true)
     const { mealPlan, menu } = useContext(AppCTX);
+    const [ schedule, setSchedule ]= useState(()=>mealPlan)
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -64,6 +60,16 @@ export default function MealPlanPage() {
         setValue(index);
     };
 
+    const createSchedule = (day, plan) =>{
+        const newEntry= {...mealPlan, [day]:plan}
+        console.log(newEntry)
+        setSchedule(()=>newEntry);
+       
+    }
+
+    React.useEffect(()=>{
+
+    })
 
     return (
         <Box sx={{ bgcolor: 'background.paper', width: '100%' }}>
@@ -90,7 +96,13 @@ export default function MealPlanPage() {
                 index={value}
                 onChangeIndex={handleChangeIndex}
             >
-              {editing?<ScheduleMeals meals={menu}/>:<DisplayMeals meals={menu} />}
+              {editing?<ScheduleMeals meals={menu} day="Monday" plan={mealPlan.Monday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Monday}/>}
+              {editing?<ScheduleMeals meals={menu} day="Tuesday" plan={mealPlan.Monday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Tuesday}/>}
+              {editing?<ScheduleMeals meals={menu} day="Wednesday" plan={mealPlan.Monday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Wednesday}/>}
+              {editing?<ScheduleMeals meals={menu} day="Thursday" plan={mealPlan.Monday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Thursday}/>}
+              {editing?<ScheduleMeals meals={menu} day="Friday" plan={mealPlan.Monday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Friday}/>}
+              {editing?<ScheduleMeals meals={menu} day="Saturday" plan={mealPlan.Monday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Saturday}/>}
+              {editing?<ScheduleMeals meals={menu} day="Sunday" plan={mealPlan.Monday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Sunday}/>}
             </SwipeableViews>
             <EditButton editing={editing} setEditing={setEditing}/>
         </Box>

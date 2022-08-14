@@ -13,19 +13,19 @@ import MealSelect from './MealSelect'
 
 
 export default function ScheduleMeals(props) {
-    const { meals } = props;
+    const { meals, day, plan, createSchedule } = props;
 
-    console.log(meals)
+    
     const menu = [
         {name:'Breakfast', meals:meals.breakfast},
         {name:'Lunch', meals:meals.lunch},
         {name:'Dinner', meals:meals.dinner},
     ];
 
-    const onChangeHandler = (newMeal) =>{
-        console.log(newMeal)
+    const onChangeHandler = (name, newMeal) =>{
+      var newEntry = {...plan,[name.toLowerCase()]: newMeal}
+      createSchedule(day, newEntry);
     }
-
 
   return (
     <TableContainer component={Paper}>
@@ -41,7 +41,7 @@ export default function ScheduleMeals(props) {
                     {item.name}
                 </TableCell>
                 <TableCell align="right">
-                    <MealSelect onChangeHandler={onChangeHandler} meals={item.meals}/>
+                    <MealSelect day={item.name} onChangeHandler={onChangeHandler} meals={item.meals}/>
                 </TableCell>
             </TableRow>
           ))}
