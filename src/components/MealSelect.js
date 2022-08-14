@@ -133,10 +133,10 @@ const CustomSelect = React.forwardRef(function CustomSelect(props, ref) {
 });
 
 export default function SelectMeal(props) {
-    const {onChangeHandler, meals, day} = props;
+    const {onChangeHandler, meals, defaultVal, day} = props;
 
   return (
-    <CustomSelect defaultValue={'none'} onChange={(value)=>onChangeHandler(day, value)}>
+    <CustomSelect defaultValue={defaultVal} onChange={(value)=>onChangeHandler(day, value)}>
         {meals.map((meal, idx)=>(
             <StyledOption key={idx} value={meal.primary}> {meal.primary} </StyledOption>
         ))}

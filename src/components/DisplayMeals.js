@@ -21,7 +21,6 @@ export default function DisplayMeals(props) {
   const [dinnerDetails, openDinnerDetails] = React.useState(false);
 
   const { mealPlan } = props;
-  console.log(mealPlan)
 
   const handleClick = () => {
     setOpen(!open);
@@ -32,11 +31,11 @@ return (
       sx={{ width: '100%', bgcolor: 'background.paper' }}
       component="nav"
       aria-labelledby="nested-list-subheader"
-      subheader={
-        <ListSubheader component="div" id="nested-list-subheader">
-          Nested List Items
-        </ListSubheader>
-      }
+    //   subheader={
+    //     <ListSubheader component="div" id="nested-list-subheader">
+    //       Nested List Items
+    //     </ListSubheader>
+    //   }
     >
         {/* Breakfast */}
         <ListItemButton onClick={()=>openBreakfastDetails(!breakfastDetails)}>

@@ -18,7 +18,8 @@ export const AppData = (props) => {
 
     // Creating a meal plan for the week
     const createPlan = (newPlan) => {
-
+        console.log('From appData',newPlan)
+        setMealPlan(newPlan)
     }
 
     // ----------------------------------

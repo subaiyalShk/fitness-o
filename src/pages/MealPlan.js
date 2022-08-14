@@ -49,8 +49,8 @@ export default function MealPlanPage() {
     const theme = useTheme();
     const [ value, setValue ] = useState(0);
     const [ editing, setEditing ] = useState(true)
-    const { mealPlan, menu } = useContext(AppCTX);
-    const [ schedule, setSchedule ]= useState(()=>mealPlan)
+    const { mealPlan, menu, createPlan } = useContext(AppCTX);
+    const [ schedule, setSchedule ] = useState(()=>mealPlan)
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -60,16 +60,17 @@ export default function MealPlanPage() {
         setValue(index);
     };
 
+
     const createSchedule = (day, plan) =>{
-        const newEntry= {...mealPlan, [day]:plan}
-        console.log(newEntry)
-        setSchedule(()=>newEntry);
-       
+        const newEntry= {...schedule, [day]:plan}
+        setSchedule(newEntry);
     }
 
     React.useEffect(()=>{
-
-    })
+        if(editing===false){
+            createPlan(schedule)
+        }
+    },[editing])
 
     return (
         <Box sx={{ bgcolor: 'background.paper', width: '100%' }}>
@@ -96,13 +97,13 @@ export default function MealPlanPage() {
                 index={value}
                 onChangeIndex={handleChangeIndex}
             >
-              {editing?<ScheduleMeals meals={menu} day="Monday" plan={mealPlan.Monday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Monday}/>}
-              {editing?<ScheduleMeals meals={menu} day="Tuesday" plan={mealPlan.Monday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Tuesday}/>}
-              {editing?<ScheduleMeals meals={menu} day="Wednesday" plan={mealPlan.Monday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Wednesday}/>}
-              {editing?<ScheduleMeals meals={menu} day="Thursday" plan={mealPlan.Monday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Thursday}/>}
-              {editing?<ScheduleMeals meals={menu} day="Friday" plan={mealPlan.Monday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Friday}/>}
-              {editing?<ScheduleMeals meals={menu} day="Saturday" plan={mealPlan.Monday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Saturday}/>}
-              {editing?<ScheduleMeals meals={menu} day="Sunday" plan={mealPlan.Monday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Sunday}/>}
+              {editing?<ScheduleMeals meals={menu} day="Monday" plan={schedule.Monday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Monday}/>}
+              {editing?<ScheduleMeals meals={menu} day="Tuesday" plan={schedule.Tuesday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Tuesday}/>}
+              {editing?<ScheduleMeals meals={menu} day="Wednesday" plan={schedule.Wednesday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Wednesday}/>}
+              {editing?<ScheduleMeals meals={menu} day="Thursday" plan={schedule.Thursday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Thursday}/>}
+              {editing?<ScheduleMeals meals={menu} day="Friday" plan={schedule.Friday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Friday}/>}
+              {editing?<ScheduleMeals meals={menu} day="Saturday" plan={schedule.Saturday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Saturday}/>}
+              {editing?<ScheduleMeals meals={menu} day="Sunday" plan={schedule.Sunday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Sunday}/>}
             </SwipeableViews>
             <EditButton editing={editing} setEditing={setEditing}/>
         </Box>
