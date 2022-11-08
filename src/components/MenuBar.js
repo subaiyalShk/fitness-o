@@ -7,9 +7,6 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import KitchenIcon from '@mui/icons-material/Kitchen';
 import Paper from '@mui/material/Paper';
-import MenuPage from '../pages/MenuPage'
-import MealPlan from '../pages/MealPlan'
-import { PropaneSharp } from '@mui/icons-material';
 
 export default function FixedBottomNavigation(props) {
   const {children, page, setPage} = props;
