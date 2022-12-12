@@ -1,10 +1,32 @@
-import React, {useState, createContext} from 'react';
+import React, {useState, createContext, useEffect} from 'react';
+import { collection, getDocs } from "firebase/firestore";
+import { db } from '../firebase-config';
+
 export const AppCTX = createContext();
 
 export const AppData = (props) => {
 
     const [menu, setMenu] = useState(MenuData);
     const [mealPlan, setMealPlan] = useState(MealPlan)
+
+    useEffect( async () =>{
+        try{
+            // const querySnapshot = await getDocs(collection(db, "users"));
+            // querySnapshot.forEach((doc) => {
+            // console.log(`${doc.id} => ${doc.data()}`);
+            // });
+
+            const querySnapshot = await getDocs(collection(db, "breakFastMenu"));
+            querySnapshot.forEach((doc) => {
+                console.log(doc)
+                const data = JSON.stringify(doc.data())
+                console.log(`${doc.id} => ${data}`);
+            });
+        }
+        catch(err){
+            console.log(err)
+        }
+    },[])
 
     // ----- Adding and deleting meals from the menu
     const createMeal = (meal, time) => {
@@ -18,7 +40,7 @@ export const AppData = (props) => {
 
     // Creating a meal plan for the week
     const createPlan = (newPlan) => {
-        console.log('From appData',newPlan)
+        console.log('From appData', newPlan)
         setMealPlan(newPlan)
     }
 

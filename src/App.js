@@ -9,11 +9,11 @@ import { AppData } from './Data/AppData'
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp'
 import { auth, Auth } from './firebase-config'
-
+import LoadingScreen from './components/LoadingScreen'
 
 function App() {
   const [page, setPage] = useState(0)
-  const [authenicated, setAuthenticate] = useState(false)
+  const [authenicated, setAuthenticate] = useState('loading')
   const [register, setRegister] = useState(false)
 
   useEffect(()=>{
@@ -28,7 +28,11 @@ function App() {
     return unsubscribe
   },[])
 
-  if(!authenicated)return(<>
+
+  if(authenicated=='loading')return(
+    <LoadingScreen color="inherit" />
+  )
+  else if(!authenicated)return(<>
     {!register?
       <SignIn setRegister={setRegister}/>
       :

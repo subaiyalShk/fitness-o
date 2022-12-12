@@ -22,14 +22,13 @@ export default function SignUp({setRegister, setAuthenticate}) {
 
     const userRegistration = async (email, password) => {
         try {
-            const res = await createUserWithEmailAndPassword(auth, email, password);
-            const user = res.user;
-            
-            await collection(db, "users").add({
-                uid: user.uid,
-                authProvider: "local",
-                email,
-            });
+          const res = await createUserWithEmailAndPassword(auth, email, password);
+          const user = res.user;
+          await collection(db, "users").add({
+              uid: user.uid,
+              authProvider: "local",
+              email,
+          });
         } catch (err) {
             alert(err.message);
         }
