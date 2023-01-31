@@ -1,14 +1,57 @@
 import React, {useState, createContext, useEffect} from 'react';
+import { collection, getDocs,getDoc, doc, setDoc } from "firebase/firestore";
+import { db } from '../firebase-config';
+import { getAuth } from "firebase/auth";
+
 export const AppCTX = createContext();
 
 export const AppData = (props) => {
-
     const [menu, setMenu] = useState(MenuData);
     const [mealPlan, setMealPlan] = useState(MealPlan)
 
+    useEffect( async () =>{
+        getMenu()
+       
+    },[])
+
+    const getUser = async () => {
+        const auth = getAuth();
+        const user = auth.currentUser;
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);   
+        return docSnap.data()
+    }
+
+    const getMenu = async () => {
+        let res = {
+            'breakfast':[],
+            'lunch':[],
+            'dinner':[]
+        };
+        const breakfastList = await getDocs(collection(db, "breakfast"));
+        breakfastList.forEach((doc) => {
+            res['breakfast'].push(doc.data())
+        });
+        const lunchList = await getDocs(collection(db, "lunch"));
+        lunchList.forEach((doc) => {
+            res['lunch'].push(doc.data())
+        });
+        const dinnerList = await getDocs(collection(db, "dinner"));
+        dinnerList.forEach((doc) => {
+            res['dinner'].push(doc.data())
+        });
+        console.log(res);
+        setMenu(res)
+    }
+
     // ----- Adding and deleting meals from the menu
-    const createMeal = (meal, time) => {
-        
+    const createMeal = async (payload, time, itemName) => {
+        try{
+            await setDoc(doc(db, time, itemName), payload);
+        }catch(err){
+            console.warn(err)
+        }
+        getMenu()
     }
 
     const deleteMeal = (meal, time) => {
@@ -18,10 +61,9 @@ export const AppData = (props) => {
 
     // Creating a meal plan for the week
     const createPlan = (newPlan) => {
-        console.log('From appData',newPlan)
+        console.log('From appData', newPlan)
         setMealPlan(newPlan)
     }
-
     // ----------------------------------
 
     // Get groccery list
@@ -31,7 +73,7 @@ export const AppData = (props) => {
 
     
     return(
-        <AppCTX.Provider value={{ menu, mealPlan, createPlan, deleteMeal, createMeal, getGroccerylist }}>
+        <AppCTX.Provider value={{ menu, mealPlan, createPlan, deleteMeal, createMeal, getGroccerylist, getUser }}>
             { props.children }
         </AppCTX.Provider>
     );

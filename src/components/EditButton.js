@@ -8,11 +8,10 @@ export default function EditButton(props) {
   const { editing, setEditing } = props;
   return (
     <Box 
-
       style={{
-      position: 'absolute',
-      bottom: 76,
-      right: 16,
+        position: 'absolute',
+        bottom: 76,
+        right: 16,
       }} 
 
       sx={{ '& > :not(style)': { m: 1 } }}
