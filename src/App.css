@@ -44,3 +44,13 @@
   height: 100vh;
   width: 100vw;
 }
+
+.add-image{
+  margin-top:50px;
+  width: 100%;
+}
+
+#selectMealTime{
+  margin-top: 20px;
+  width: 100%;
+}

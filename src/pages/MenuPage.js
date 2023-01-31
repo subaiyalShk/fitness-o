@@ -15,6 +15,8 @@ import Avatar from '@mui/material/Avatar';
 import AddBtn from '../components/AddButton'
 import AddMenuItem from '../pages/AddMenuItem'
 import { AppCTX } from '../Data/AppData'
+import MenuCard from '../components/MenuCard'
+import Container from '@mui/material/Container';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -66,10 +68,21 @@ export default function MenuPage() {
 
     const MenuList = (props) => {
         const {items, idx} = props;
-
         return(
             <TabPanel value={value} index={idx} dir={theme.direction}>
-                <List>
+                <Container maxWidth="md">
+                    <Box 
+                        sx={{  
+                            display: 'flex', 
+                            flexWrap:"wrap", 
+                            justifyContent:"space-around" 
+                        }}>
+                        {items.map((item, index) => (
+                            <MenuCard item={item} />
+                        ))}
+                    </Box>
+                </Container>
+                {/* <List>
                     {items.map(({ primary, secondary, person }, index) => (
                     <ListItem button key={index + person}>
                         <ListItemAvatar>
@@ -78,7 +91,7 @@ export default function MenuPage() {
                         <ListItemText primary={primary} secondary={secondary} />
                     </ListItem>
                     ))}
-                </List>
+                </List> */}
             </TabPanel>
         )
     }   

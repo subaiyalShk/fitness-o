@@ -11,6 +11,8 @@ import ScheduleMeals from '../components/ScheduleMeals'
 import DisplayMeals from '../components/DisplayMeals'
 import EditButton from '../components/EditButton'
 import { AppCTX } from '../Data/AppData'
+import Container from '@mui/material/Container';
+
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -92,19 +94,21 @@ export default function MealPlanPage() {
                     <Tab label="Sunday" {...a11yProps(2)} />
                 </Tabs>
             </AppBar>
-            <SwipeableViews
-                axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-                index={value}
-                onChangeIndex={handleChangeIndex}
-            >
-              {editing?<ScheduleMeals meals={menu} day="Monday" plan={schedule.Monday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Monday}/>}
-              {editing?<ScheduleMeals meals={menu} day="Tuesday" plan={schedule.Tuesday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Tuesday}/>}
-              {editing?<ScheduleMeals meals={menu} day="Wednesday" plan={schedule.Wednesday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Wednesday}/>}
-              {editing?<ScheduleMeals meals={menu} day="Thursday" plan={schedule.Thursday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Thursday}/>}
-              {editing?<ScheduleMeals meals={menu} day="Friday" plan={schedule.Friday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Friday}/>}
-              {editing?<ScheduleMeals meals={menu} day="Saturday" plan={schedule.Saturday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Saturday}/>}
-              {editing?<ScheduleMeals meals={menu} day="Sunday" plan={schedule.Sunday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Sunday}/>}
-            </SwipeableViews>
+            <Container maxWidth="md" style={{marginTop:"10px"}}>
+                <SwipeableViews
+                    axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                    index={value}
+                    onChangeIndex={handleChangeIndex}
+                >
+                        {editing?<ScheduleMeals meals={menu} day="Monday" plan={schedule.Monday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Monday}/>}
+                        {editing?<ScheduleMeals meals={menu} day="Tuesday" plan={schedule.Tuesday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Tuesday}/>}
+                        {editing?<ScheduleMeals meals={menu} day="Wednesday" plan={schedule.Wednesday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Wednesday}/>}
+                        {editing?<ScheduleMeals meals={menu} day="Thursday" plan={schedule.Thursday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Thursday}/>}
+                        {editing?<ScheduleMeals meals={menu} day="Friday" plan={schedule.Friday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Friday}/>}
+                        {editing?<ScheduleMeals meals={menu} day="Saturday" plan={schedule.Saturday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Saturday}/>}
+                        {editing?<ScheduleMeals meals={menu} day="Sunday" plan={schedule.Sunday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Sunday}/>}
+                </SwipeableViews>
+            </Container>
             <EditButton editing={editing} setEditing={setEditing}/>
         </Box>
     );
