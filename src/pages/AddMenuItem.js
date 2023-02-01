@@ -58,16 +58,17 @@ export default function AddMenuItem({goBack}) {
     }
 
     let user = await getUser()
+    console.log(user)
     const imageUrl = await imageUpload(image)
     const payload = {
       image: imageUrl,
       title: title,
       description: description,
       method: method,
-      author: user.displayName,
+      author: user.userName,
     }
-    console.log(payload)
     createMeal(payload, mealtime, payload.title)
+    goBack(true)
   }
 
   return (

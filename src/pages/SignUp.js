@@ -13,33 +13,38 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { auth, db } from '../firebase-config'
-import {createUserWithEmailAndPassword} from 'firebase/auth'
-import { collection } from "firebase/firestore";
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { doc, setDoc } from "firebase/firestore";
+
 
 const theme = createTheme();
 
 export default function SignUp({setRegister, setAuthenticate}) {
 
-    const userRegistration = async (email, password) => {
-        try {
-          const res = await createUserWithEmailAndPassword(auth, email, password);
-          const user = res.user;
-          await collection(db, "users").add({
-              uid: user.uid,
-              authProvider: "local",
-              email,
-          });
-        } catch (err) {
-            alert(err.message);
-        }
+    const userRegistration = async (email, password, firstName, lastName, userName) => {
+      try {
+        const res = await createUserWithEmailAndPassword(auth, email, password);
+        const user = res.user;
+        await setDoc(doc(db, "users", user.uid), {
+            "firstName" : firstName,
+            "lastName" : lastName,
+            "userName" : userName,
+        });
+      } catch (err) {
+          alert(err.message);
+      }
     };
+
 
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         const email = data.get('email')
         const password = data.get('password')
-        userRegistration(email, password)
+        const firstName = data.get('fname')
+        const lastName = data.get('lname')
+        const userName = data.get('uname')
+        userRegistration(email, password, firstName, lastName, userName)
     };
 
     const handleSignUp = (e) => {
@@ -86,6 +91,36 @@ export default function SignUp({setRegister, setAuthenticate}) {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="fname"
+                  label="First Name"
+                  name="fname"
+                  autoComplete="First Name"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="lname"
+                  label="Last Name"
+                  name="lname"
+                  autoComplete="Last Name"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="uname"
+                  label="Display Name"
+                  name="uname"
+                  autoComplete="Display Name"
                 />
               </Grid>
               <Grid item xs={12}>

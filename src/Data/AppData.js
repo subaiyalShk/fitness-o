@@ -11,7 +11,6 @@ export const AppData = (props) => {
 
     useEffect( async () =>{
         getMenu()
-       
     },[])
 
     const getUser = async () => {
@@ -46,6 +45,7 @@ export const AppData = (props) => {
 
     // ----- Adding and deleting meals from the menu
     const createMeal = async (payload, time, itemName) => {
+        console.log('ADDING MEAL', {payload, time, itemName})
         try{
             await setDoc(doc(db, time, itemName), payload);
         }catch(err){
