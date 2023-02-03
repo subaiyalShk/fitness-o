@@ -14,8 +14,8 @@ export default function SelectMealTime({output, setOutput, invalidInputs, setInv
 
   return (
     <div id="selectMealTime">
-      <Box sx={{ width: "30%" }}>
-        <FormControl fullWidth error >
+      <Box sx={{ maxWidth: "150px" }}>
+        <FormControl fullWidth error={invalidInputs.mealtime} >
           <InputLabel id="demo-simple-select-label">Select Meal</InputLabel>
           <Select
             labelId="demo-simple-select-label"

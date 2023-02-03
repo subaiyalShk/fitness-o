@@ -13,6 +13,7 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import {validateInputs, textInputHandler} from '../utils/inputHandlers'
 import SelectMealTime from '../components/SelectMealTime'
+import Paper from '@mui/material/Paper';
 
 
 export default function AddMenuItem({goBack}) {
@@ -49,7 +50,7 @@ export default function AddMenuItem({goBack}) {
       ['title', title, 4],
       ['description', description, 5],
       ['method', method, 10],
-      ['mealTime', mealtime, 3]
+      ['mealtime', mealtime, 3]
     ], invalidInputs, setInvalidInputs))return
 
     if(image==null){
@@ -80,57 +81,59 @@ export default function AddMenuItem({goBack}) {
             <ArrowBackIcon fontSize="inherit" />
           </IconButton>
         </Box>
-        <Box sx={{  minHeight: '90vh', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-          <SelectMealTime invalidInputs={invalidInputs} output={mealtime} setOutput={setMealtime} setInvalidInputs={setInvalidInputs}/>
-          {/* DISPLAY title */}
-            <TextField  
-              style={{marginTop:"50px", width:"100%"}} 
-              id="outlined-basic" 
-              label="Recipie title" 
-              variant="outlined" 
-              onChange={(e)=>textInputHandler("title", e.target.value, setTitle, 4, setInvalidInputs, invalidInputs)}
-              error={invalidInputs["title"]}
-              helperText={invalidInputs["title"]? "Incorrect entry." : null}
-            />
-          {/* THIS IS DISPLAY PICTURE UPLOAD */}
-            { image? 
-              <img src={URL.createObjectURL(image)} loading="lazy" className="add-image" />
-            :
-              <Button variant="outlined" component="label" style={{marginTop:"50px", width:"50%"}} startIcon={<PhotoCamera />}>
-               Upload Photo
-               <input hidden accept="image/*" type="file" onChange={(e)=>setImage(e.target.files[0])} />
-              </Button>
-            }
-          {/* DESCRIPTION */}
-            <TextField
-              style={{marginTop:"50px", width:"100%"}}
-              id="outlined-multiline-static"
-              label="Description"
-              multiline
-              rows={4}
-              onChange={(e)=>textInputHandler("description", e.target.value, setDescription, 5, setInvalidInputs, invalidInputs)}
-              error={invalidInputs["description"]}
-              helperText={invalidInputs["description"]? "Please enter minimum 5 character description" : null}
+        <Paper elevation={6}>
+          <Box sx={{ margin:"30px", minHeight: '90vh', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <SelectMealTime invalidInputs={invalidInputs} output={mealtime} setOutput={setMealtime} setInvalidInputs={setInvalidInputs}/>
+            {/* DISPLAY title */}
+              <TextField  
+                style={{marginTop:"50px", width:"100%"}} 
+                id="outlined-basic" 
+                label="Recipie title" 
+                variant="outlined" 
+                onChange={(e)=>textInputHandler("title", e.target.value, setTitle, 4, setInvalidInputs, invalidInputs)}
+                error={invalidInputs["title"]}
+                helperText={invalidInputs["title"]? "Incorrect entry." : null}
+              />
+            {/* THIS IS DISPLAY PICTURE UPLOAD */}
+              { image? 
+                <img src={URL.createObjectURL(image)} loading="lazy" className="add-image" />
+              :
+                <Button variant="outlined" component="label" style={{marginTop:"50px", width:"50%"}} startIcon={<PhotoCamera />}>
+                Upload Photo
+                <input hidden accept="image/*" type="file" onChange={(e)=>setImage(e.target.files[0])} />
+                </Button>
+              }
+            {/* DESCRIPTION */}
+              <TextField
+                style={{marginTop:"50px", width:"100%"}}
+                id="outlined-multiline-static"
+                label="Description"
+                multiline
+                rows={4}
+                onChange={(e)=>textInputHandler("description", e.target.value, setDescription, 5, setInvalidInputs, invalidInputs)}
+                error={invalidInputs["description"]}
+                helperText={invalidInputs["description"]? "Please enter minimum 5 character description" : null}
 
-            />
-          {/* METHOD */}
-            <TextField
-              style={{marginTop:"50px", width:"100%"}}
-              id="outlined-multiline-static"
-              label="Method"
-              multiline
-              rows={4}
-              onChange={(e)=>textInputHandler("method", e.target.value, setMethod, 10, setInvalidInputs, invalidInputs)}
-              error={invalidInputs["method"]}
-              helperText={invalidInputs["method"]? "Please enter minimum 10 character description" : null}
-            />
-          <Button onClick={handleSubmit} style={{marginTop:"50px", width:"50%"}} variant="contained">Save</Button>
-          <Snackbar open={imageError} autoHideDuration={6000} onClose={handleClose}>
-            <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-              You forgot to upload an image. 
-            </Alert>
-          </Snackbar>
-        </Box>
+              />
+            {/* METHOD */}
+              <TextField
+                style={{marginTop:"50px", width:"100%"}}
+                id="outlined-multiline-static"
+                label="Method"
+                multiline
+                rows={4}
+                onChange={(e)=>textInputHandler("method", e.target.value, setMethod, 10, setInvalidInputs, invalidInputs)}
+                error={invalidInputs["method"]}
+                helperText={invalidInputs["method"]? "Please enter minimum 10 character description" : null}
+              />
+            <Button onClick={handleSubmit} style={{margin:"50px", width:"50%"}} variant="contained">Save</Button>
+            <Snackbar open={imageError} autoHideDuration={6000} onClose={handleClose}>
+              <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+                You forgot to upload an image. 
+              </Alert>
+            </Snackbar>
+          </Box>
+        </Paper>
       </Container>
     </React.Fragment>
   );
