@@ -21,8 +21,9 @@ export default function FixedBottomNavigation(props) {
     <Box sx={{ pb: 7 }} ref={ref}>
       <CssBaseline/>
       {children}
-      <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
+      <Paper sx={{position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
         <BottomNavigation
+          id="bottom-navigation"
           showLabels
           value={page}
           onChange={(event, nextPage) => {

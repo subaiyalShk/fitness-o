@@ -97,39 +97,34 @@ export default function MenuPage() {
     }   
 
     return (
-        <Box sx={{ bgcolor: 'background.paper', width: '100%' }}>
-            {
-                add?
-                <AddMenuItem goBack={()=>setAdd(false)}/>
-                :
-                <>
-                    <AppBar position="static">
-                        <Tabs
-                        value={value}
-                        onChange={handleChange}
-                        indicatorColor="secondary"
-                        textColor="inherit"
-                        variant="fullWidth"
-                        aria-label="full width tabs example"
-                        >
-                        <Tab label="Breakfast" {...a11yProps(0)} />
-                        <Tab label="Lunch" {...a11yProps(1)} />
-                        <Tab label="Dinner" {...a11yProps(2)} />
-                        </Tabs>
-                    </AppBar>
-                    <SwipeableViews
-                        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-                        index={value}
-                        onChangeIndex={handleChangeIndex}
-                    >
-                        <MenuList items={menu.breakfast} idx={0} />
-                        <MenuList items={menu.lunch} idx={1} />
-                        <MenuList items={menu.dinner} idx={2} />
-                    </SwipeableViews>
-                    <AddBtn onClick={()=>setAdd(true)}/>
-                </>
-            }
-            
+        <Box sx={{ bgcolor: '#192327', width: '100%' }}>
+            <AppBar position="static">
+                <Tabs
+                    id="top-bar"
+                    value={value}
+                    onChange={handleChange}
+                    indicatorColor="secondary"
+                    textColor="#9FD218"
+                    variant="fullWidth"
+                    aria-label="full width tabs example"
+                >
+                    <Tab label="Breakfast" {...a11yProps(0)} />
+                    <Tab label="Lunch" {...a11yProps(1)} />
+                    <Tab label="Dinner" {...a11yProps(2)} />
+                </Tabs>
+            </AppBar>
+                <SwipeableViews
+                    axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                    index={value}
+                    onChangeIndex={handleChangeIndex}
+                >
+                    
+                    <MenuList items={menu.breakfast} idx={0} />
+                    <MenuList items={menu.lunch} idx={1} />
+                    <MenuList items={menu.dinner} idx={2} />
+                </SwipeableViews>
+            <AddBtn onClick={()=>setAdd(true)}/>
+            <AddMenuItem setOpen={setAdd} open={add}/>
         </Box>
     );
 }

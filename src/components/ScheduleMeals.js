@@ -5,7 +5,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import MealSelect from './MealSelect'
+// import MealSelect from './MealSelect'
 
 
 
@@ -28,23 +28,22 @@ export default function ScheduleMeals(props) {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ width: '100%' }} aria-label="simple table">
-        
         <TableBody>
           {menu.map((item) => (
             <TableRow
               key={item.name}
               sx={{ '&:last-child td, &:last-child th': { border: 0 }, height:"150px" }}
             >
-                <TableCell component="th" scope="row">
-                    {item.name}
-                </TableCell>
-                <TableCell align="right">
-                    <MealSelect day={item.name} 
-                      defaultVal={plan[item.name.toLowerCase()]} 
-                      onChangeHandler={onChangeHandler} 
-                      meals={item.meals}
-                    />
-                </TableCell>
+              <TableCell component="th" scope="row">
+                  {item.name}
+              </TableCell>
+              <TableCell align="right">
+                {/* <MealSelect day={item.name} 
+                  defaultVal={plan[item.name.toLowerCase()]} 
+                  onChangeHandler={onChangeHandler} 
+                  meals={item.meals}
+                /> */}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

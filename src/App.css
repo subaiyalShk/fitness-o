@@ -54,3 +54,55 @@
   margin-top: 50px;
   width: 100%;
 }
+
+#bottom-navigation{
+  background-color: #213239;
+}
+
+#bottom-navigation .MuiButtonBase-root{
+  color: aliceblue;
+}
+#bottom-navigation .Mui-selected{
+  color: #F07E32;
+}
+
+#top-bar{
+  background-color: #213239;
+}
+
+#top-bar .Mui-selected{
+  color: #F07E32;
+}
+#top-bar .MuiTabs-indicator{
+  background-color: #9FD218;
+}
+
+.MuiPaper-root.MuiCard-root{
+  background-color: #213239;
+  color: aliceblue;
+}
+
+.MuiTypography-root{
+  color: aliceblue !important;
+}
+
+.MuiPaper-root.MuiCard-root .MuiButtonBase-root{
+  color: aliceblue !important;
+}
+
+.MuiDialog-paperFullScreen{
+  background-color: #192327 !important;
+}
+
+.MuiDialog-paperFullScreen .MuiPaper-root{
+  background-color: #213239;
+}
+
+.MuiDialog-paperFullScreen label{
+  color: aliceblue !important;
+}
+
+.MuiToolbar-root{
+  background-color: #213239 !important;
+}
+
