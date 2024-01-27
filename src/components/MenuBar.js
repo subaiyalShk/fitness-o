@@ -7,6 +7,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import KitchenIcon from '@mui/icons-material/Kitchen';
 import Paper from '@mui/material/Paper';
+import SportsMartialArtsIcon from '@mui/icons-material/SportsMartialArts';
 
 export default function FixedBottomNavigation(props) {
   const {children, page, setPage} = props;
@@ -30,6 +31,7 @@ export default function FixedBottomNavigation(props) {
             setPage(nextPage);
           }}
         >
+          <BottomNavigationAction label="Training" icon={<SportsMartialArtsIcon />} />
           <BottomNavigationAction label="Menu" icon={<MenuBookIcon />} />
           <BottomNavigationAction label="Meal Plan" icon={<CalendarMonthIcon />} />
           <BottomNavigationAction label="Groccery list" icon={<KitchenIcon/>} />
