@@ -16,7 +16,6 @@ import Container from '@mui/material/Container';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
-
     return (
         <div
         role="tabpanel"
@@ -49,19 +48,9 @@ function a11yProps(index) {
 
 export default function MealPlanPage() {
     const theme = useTheme();
-    const [ value, setValue ] = useState(0);
     const [ editing, setEditing ] = useState(true)
-    const { mealPlan, menu, createPlan } = useContext(AppCTX);
+    const { mealPlan, menu, createPlan, selectedDay, setSelectedDay } = useContext(AppCTX);
     const [ schedule, setSchedule ] = useState(()=>mealPlan)
-
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
-
-    const handleChangeIndex = (index) => {
-        setValue(index);
-    };
-
 
     const createSchedule = (day, plan) =>{
         const newEntry= {...schedule, [day]:plan}
@@ -76,29 +65,11 @@ export default function MealPlanPage() {
 
     return (
         <Box sx={{ bgcolor: 'background.paper', width: '100%' }}>
-            <AppBar position="static">
-                <Tabs
-                value={value}
-                onChange={handleChange}
-                indicatorColor="secondary"
-                textColor="inherit"
-                variant="scrollable"
-                aria-label="full width tabs example"
-                >
-                    <Tab label="Monday" {...a11yProps(0)} />
-                    <Tab label="Tuesday" {...a11yProps(1)} />
-                    <Tab label="Wednesday" {...a11yProps(2)} />
-                    <Tab label="Thursday" {...a11yProps(2)} />
-                    <Tab label="Friday" {...a11yProps(2)} />
-                    <Tab label="Saturday" {...a11yProps(2)} />
-                    <Tab label="Sunday" {...a11yProps(2)} />
-                </Tabs>
-            </AppBar>
             <Container maxWidth="md" style={{marginTop:"10px"}}>
                 <SwipeableViews
                     axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-                    index={value}
-                    onChangeIndex={handleChangeIndex}
+                    index={selectedDay}
+                    onChangeIndex={(newValue)=>setSelectedDay(newValue)}
                 >
                         {editing?<ScheduleMeals meals={menu} day="Monday" plan={schedule.Monday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Monday}/>}
                         {editing?<ScheduleMeals meals={menu} day="Tuesday" plan={schedule.Tuesday} createSchedule={createSchedule}/>:<DisplayMeals mealPlan={mealPlan.Tuesday}/>}

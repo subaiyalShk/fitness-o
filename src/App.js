@@ -1,8 +1,8 @@
 
 import './App.css';
 import {useEffect, useState} from 'react'
-import MenuBar from './components/MenuBar'
-import MenuPage from './pages/MenuPage'
+import Navigation from './components/Navigation'
+import MenuPage from './pages/RecipieBook'
 import MealPlan from './pages/MealPlan'
 import GrocceyList from './pages/GrocceryList'
 import { AppData } from './Data/AppData'
@@ -59,12 +59,11 @@ function App() {
           <SignUp setRegister={setRegister}/>
         :
         <AppData>
-          <MenuBar page={page} setPage={setPage}>
+          <Navigation page={page} setPage={setPage}>
             { page===0? <TrainingPage/> : null}
-            { page===1? <MenuPage/> : null}
-            { page===2? <MealPlan/> : null}
-            { page===3? <GrocceyList/> : null}
-          </MenuBar>
+            { page===1? <MealPlan/> : null}
+            { page===2? <GrocceyList/> : null}
+          </Navigation>
         </AppData>
       }
     </div>

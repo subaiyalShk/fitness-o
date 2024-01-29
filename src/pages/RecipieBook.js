@@ -13,14 +13,14 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
 import AddBtn from '../components/AddButton'
-import AddMenuItem from '../pages/AddMenuItem'
+import AddMenuItem from './AddMenuItem'
 import { AppCTX } from '../Data/AppData'
 import MenuCard from '../components/MenuCard'
 import Container from '@mui/material/Container';
 
+
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
-   
 
     return (
         <div
@@ -52,11 +52,11 @@ function a11yProps(index) {
     };
 }
 
-export default function MenuPage() {
+export default function RecipieBook() {
     const theme = useTheme();
     const { menu } = useContext(AppCTX);
-    const [value, setValue] = useState(0);
-    const [add, setAdd] = useState(false);
+    const [ value, setValue ] = useState(0);
+    const [ add, setAdd ] = useState(false);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);

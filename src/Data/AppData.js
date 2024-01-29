@@ -8,6 +8,7 @@ export const AppCTX = createContext();
 export const AppData = (props) => {
     const [menu, setMenu] = useState(MenuData);
     const [mealPlan, setMealPlan] = useState(MealPlan)
+    const [selectedDay, setSelectedDay] = useState(0)
 
     useEffect( async () =>{
         getMenu()
@@ -73,7 +74,7 @@ export const AppData = (props) => {
 
     
     return(
-        <AppCTX.Provider value={{ menu, mealPlan, createPlan, deleteMeal, createMeal, getGroccerylist, getUser }}>
+        <AppCTX.Provider value={{ menu, mealPlan, createPlan, deleteMeal, createMeal, getGroccerylist, getUser, selectedDay, setSelectedDay }}>
             { props.children }
         </AppCTX.Provider>
     );
