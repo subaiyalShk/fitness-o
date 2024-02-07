@@ -1,5 +1,5 @@
 import React, {useState, createContext, useEffect} from 'react';
-import { collection, getDocs, getDoc, doc, setDoc } from "firebase/firestore";
+import { collection, getDocs, getDoc, doc, setDoc, deleteDoc, addDoc } from "firebase/firestore";
 import { db } from '../firebase-config';
 import { getAuth } from "firebase/auth";
 
@@ -9,9 +9,12 @@ export const AppData = (props) => {
     const [menu, setMenu] = useState(MenuData);
     const [mealPlan, setMealPlan] = useState(MealPlan)
     const [selectedDay, setSelectedDay] = useState(0)
+    const [workouts, setWorkouts] = useState([])
+    const [editingMode, setEditingMode] = useState(false)
 
     useEffect( async () =>{
         getMenu()
+        getWorkouts()
     },[])
 
     const getUser = async () => {
@@ -72,9 +75,61 @@ export const AppData = (props) => {
 
     }
 
+    const getWorkouts = async () => {
+        const workouts = []
+        let querySnapshot = await getDocs(collection(db, "Workouts"));
+        querySnapshot.forEach((doc) => {
+            console.log({...doc.data(), id:doc.id })
+            workouts.push({...doc.data(), id:doc.id });
+        });
+        setWorkouts(workouts)
+    }
+
+    const saveWorkouts = async (newData) => {
+        console.log('new Data Collection', newData)
+        // loop through newData 
+        for (let index in newData) {
+            // if object has no id 
+            console.log('data',newData[index])
+            if (newData[index].status === 'new'){
+                // add new workout to collection called Workouts
+                delete newData[index].status
+                console.log('data added', newData[index])
+                addDoc(collection(db, "Workouts"), newData[index])
+            }else if (newData[index].status === 'changed'){
+                // update existing document in collection called Workouts
+                let idx= newData[index].id
+                delete newData[index].status
+                delete newData[index].id
+                console.log('changed Data', newData[index])
+                await setDoc(doc(db, "Workouts", idx), newData[index]);
+            }else if (newData[index].status === 'deleted'){
+                // delete existing document in collection called Workouts
+                deleteDoc(doc(db, "Workouts", newData[index].id))
+            }
+        }
+        getWorkouts()
+        
+    }
+
     
     return(
-        <AppCTX.Provider value={{ menu, mealPlan, createPlan, deleteMeal, createMeal, getGroccerylist, getUser, selectedDay, setSelectedDay }}>
+        <AppCTX.Provider value={{ 
+            menu, 
+            mealPlan, 
+            createPlan, 
+            deleteMeal, 
+            createMeal, 
+            getGroccerylist, 
+            getUser, 
+            selectedDay, 
+            setSelectedDay, 
+            workouts, 
+            setWorkouts,
+            editingMode, 
+            setEditingMode,
+            saveWorkouts
+        }}>
             { props.children }
         </AppCTX.Provider>
     );

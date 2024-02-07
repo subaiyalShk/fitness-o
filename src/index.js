@@ -3,10 +3,40 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { createTheme, ThemeProvider } from '@mui/material';
+import CssBaseline from '@mui/material/CssBaseline';
+
+const theme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#9FD218',
+    },
+    secondary: {
+      main: '#F07E32',
+    },
+    background: {
+      default: '#192327',
+      paper: '#213239',
+    },
+    error: {
+      main: '#DF392D',
+    },
+    warning: {
+      main: '#DF392D',
+    },
+    info: {
+      main: '#DF392D',
+    },
+  },
+});
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider theme={theme}>
+      <CssBaseline/>
+      <App />
+    </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

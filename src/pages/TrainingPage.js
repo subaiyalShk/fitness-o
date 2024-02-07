@@ -1,28 +1,48 @@
-import React from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { Card, CardContent, Typography, CardActions, Button } from '@mui/material';
 import Container from '@mui/material/Container';
-
-const cardData = [
-  { title: 'Card 1', content: <iframe width="100%"  src="https://www.youtube.com/embed/Q3mqj0S-ECY?si=UZYh9QFZzWkpfkIA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe> },
-  { title: 'Card 2', content: <iframe width="100%"  src="https://www.youtube.com/embed/vXv6uvrUjKo?si=Gl94qC8DLn-8mL3N" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe> },
-  { title: 'Card 3', content: <iframe width="100%"  src="https://www.youtube.com/embed/xIYJUzYd670?si=wCZsoSKtLIldYNbE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe> },
-  { title: 'Card 4', content: <iframe width="100%"  src="https://www.youtube.com/embed/b31yQTUAdJo?si=MURqcHauiDZAq2xe" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe> },
-  { title: 'Card 5', content: <iframe width="100%"  src="https://www.youtube.com/embed/L5gGu_A2b-U?si=F1Vw8vQcTNs_tJEf" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe> },
-  { title: 'Card 6', content: <iframe width="100%"   src="https://www.youtube.com/embed/8GVTsOYP4Gw?si=70glXci1QDQuK-7v" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe> },
-  { title: 'Card 7', content: <iframe width="100%" src="https://www.youtube.com/embed/b31yQTUAdJo?si=MURqcHauiDZAq2xe" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe> },
-  // Add more card data as needed
-];
+import CardHeader from '@mui/material/CardHeader';
+import Box from '@mui/material/Box';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import { AppCTX } from '../Data/AppData'
 
 const TrainingPage = () => {
+  const {workouts, selectedDay} = useContext(AppCTX);
+  const [filteredWorkouts, setFilteredWorkouts] = useState(workouts)
+  const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+  
+  useEffect(() =>{
+    let filteredData;
+    filteredData = workouts.filter((workout) => workout.days[days[selectedDay]])
+    setFilteredWorkouts([...filteredData])
+  },[selectedDay,workouts])
+
+
   return (
-    <Container sx={{height:'100vh', overflow:'scroll', display:'flex', justifyContent:'center', flexWrap:"wrap"}} fixed>
-        {cardData.map((card, index) => (
+    <Container sx={{ height:'100vh'}} fixed>
+        <Box 
+          sx={{paddingTop:'100px', paddingBottom:'100px', overflow:'scroll', display:'flex', flexWrap:"wrap", justifyContent:'center'}}
+        >
+        {filteredWorkouts.map((workout, index) => (
+          <Box >
             <Card sx={{margin:'10px', width:'300px'}} key={index}>
-            <CardContent>
-                {card.content}
-            </CardContent>
+              <CardHeader
+                title={workout.name}
+              />
+              <CardContent>
+                <iframe width="100%"  src={workout.url} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
+              </CardContent>
+              <CardActions disableSpacing>
+                <FormGroup>
+                  <FormControlLabel control={<Checkbox />} label="Workout Completed" />
+                </FormGroup>
+              </CardActions>
             </Card>
+          </Box>
         ))}
+        </Box>
     </Container>
   );
 };

@@ -22,24 +22,30 @@ import BottomNavigation from '@mui/material/BottomNavigation';
 import SportsMartialArtsIcon from '@mui/icons-material/SportsMartialArts';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import KitchenIcon from '@mui/icons-material/Kitchen';
 import { AppCTX } from '../Data/AppData'
 import { useContext } from 'react';
 import LogoutIcon from '@mui/icons-material/Logout';
 import EqualizerIcon from '@mui/icons-material/Equalizer';
 import RecipieBook from '../pages/RecipieBook'
 import GrocceryList from '../pages/GrocceryList'
-import PopUpPage from '../components/PopUpPage'
+import ManageTraining from '../pages/ManageTraining';
+import LocalGroceryStoreIcon from '@mui/icons-material/LocalGroceryStore';
+import SportsGymnasticsIcon from '@mui/icons-material/SportsGymnastics';
 
 const drawerWidth = 240;
 
 function Navigation(props) {
-  const {selectedDay, setSelectedDay} = useContext(AppCTX);
-  const {children, page, setPage } = props;
+  const {selectedDay, setSelectedDay, editingMode, setEditingMode} = useContext(AppCTX);
+  const {children, page, setPage} = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
   const [selectedPopUpPage, setSelectedPopUpPage] = React.useState(0);
-  const [showPopUpPage, setShowPopUpPage] = React.useState(false)
+  
+  const popUpPages = [
+    ['Manage Training', <ManageTraining/>, <SportsGymnasticsIcon/>],
+    ['Recipie Book', <RecipieBook/>, <MenuBookIcon/>],
+    ['Groccery List', <GrocceryList/>, <LocalGroceryStoreIcon/>]
+  ]
 
   const handleDrawerClose = () => {
     setIsClosing(true);
@@ -57,8 +63,8 @@ function Navigation(props) {
   };
 
   const handleOpenPage = (page) => {
+    setEditingMode(true)
     setSelectedPopUpPage(page)
-    setShowPopUpPage(true)
   }
 
   const drawer = (
@@ -66,22 +72,16 @@ function Navigation(props) {
       <Toolbar />
       <Divider />
       <List>
-        <ListItem disablePadding>
-          <ListItemButton onClick={()=>handleOpenPage(0)}>
-            <ListItemIcon>
-              <MenuBookIcon sx={{color:'white'}}/>
-            </ListItemIcon>
-            <ListItemText primary={'Recipie book'} />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton onClick={()=>handleOpenPage(1)}>
-            <ListItemIcon>
-              <KitchenIcon sx={{color:'white'}}/>
-            </ListItemIcon>
-            <ListItemText primary={'Groccery list'} />
-          </ListItemButton>
-        </ListItem>
+        {popUpPages.map((page, index)=>{
+          return(<ListItem disablePadding key={index}>
+            <ListItemButton onClick={()=>handleOpenPage(index)}>
+              <ListItemIcon>
+                {page[2]}
+              </ListItemIcon>
+              <ListItemText primary={page[0]}/>
+            </ListItemButton>
+          </ListItem>)
+        })}
         <ListItem disablePadding>
           <ListItemButton onClick={()=>handleOpenPage(2)}>
             <ListItemIcon>
@@ -184,10 +184,14 @@ function Navigation(props) {
           <BottomNavigationAction label="Progress" icon={<EqualizerIcon />} />
         </BottomNavigation>
       </Paper>
-      <PopUpPage open={showPopUpPage} setOpen={setShowPopUpPage}>
-        {selectedPopUpPage===0?<RecipieBook/>:null}
-        {selectedPopUpPage===1?<GrocceryList/>:null}
-      </PopUpPage>
+      {
+        editingMode ?
+        popUpPages[selectedPopUpPage][1]:
+        null
+      }
+      {/* <PopUpPage open={showPopUpPage} setOpen={setShowPopUpPage}>
+        {popUpPages[selectedPopUpPage][1]}
+      </PopUpPage> */}
     </Box>
   );
 }

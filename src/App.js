@@ -9,7 +9,7 @@ import { AppData } from './Data/AppData'
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp'
 import { auth, Auth } from './firebase-config'
-import LoadingScreen from './components/LoadingScreen'
+
 import Backdrop from '@mui/material/Backdrop';
 import Logo from './taekwondo.png'
 import Stack from '@mui/material/Stack';

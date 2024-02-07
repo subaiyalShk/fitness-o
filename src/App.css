@@ -30,16 +30,7 @@
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.loadingPage{
+/* .loadingPage{
   display: flex;
   align-items: center;
   justify-content: center;
@@ -108,3 +99,11 @@
   background-color: #213239 !important;
 }
 
+.content-bg .MuiInputBase-input{
+  border-color: aliceblue;
+}
+
+.css-24rejj-MuiInputBase-input-MuiOutlinedInput-input {
+  color: white !important;
+}
+ */
