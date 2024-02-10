@@ -38,7 +38,7 @@ function App() {
     setTimeout(()=>{
       setLoading(false)
     },2000)
-  },authenicated)
+  },[authenicated])
   
   return (
     <div className="App">

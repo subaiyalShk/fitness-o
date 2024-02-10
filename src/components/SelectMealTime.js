@@ -6,25 +6,29 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { textInputHandler} from '../utils/inputHandlers'
 
-export default function SelectMealTime({output, setOutput, invalidInputs, setInvalidInputs}) {
+export default function SelectMealTime({data, changeData, invalidInputs, setInvalidInputs}) {
   
   const handleChange = (event) => {
-    setOutput(event.target.value);
+    changeData({
+        ...data,
+        time: event.target.value,
+        days:{...data.days}
+      })
   };
 
   return (
     <div id="selectMealTime">
       <Box sx={{ maxWidth: "150px" }}>
-        <FormControl fullWidth error={invalidInputs.mealtime} >
+        <FormControl fullWidth error={invalidInputs.time} >
           <InputLabel id="demo-simple-select-label">Select Meal</InputLabel>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={output}
+            value={data.time}
             label="Meal"
-            onChange={(e)=>textInputHandler("mealtime", e.target.value, setOutput, 2, setInvalidInputs, invalidInputs)}
+            onChange={handleChange}
             error={invalidInputs["mealtime"]}
-            helperText={invalidInputs["mealtime"]? "Please an input" : null}
+            // helperText={invalidInputs["mealtime"]? "Please an input" : null}
           >
             <MenuItem value={'breakfast'}>Breakfast</MenuItem>
             <MenuItem value={'lunch'}>Lunch</MenuItem>

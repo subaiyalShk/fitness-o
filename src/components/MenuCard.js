@@ -10,31 +10,55 @@ import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import FormGroup from '@mui/material/FormGroup';
+import Checkbox from '@mui/material/Checkbox';
 
-const ExpandMore = styled((props) => {
-  const { expand, ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-  marginLeft: 'auto',
-  transition: theme.transitions.create('transform', {
-    duration: theme.transitions.duration.shortest,
-  }),
-}));
-
-export default function MenuCard({item}) {
+export default function MenuCard({id, item, setShowRecipie, makeChanges}) {
   const [expanded, setExpanded] = React.useState(false);
+  const [cardheight, setCardHeight] = React.useState(320)
 
   const handleExpandClick = () => {
-    setExpanded(!expanded);
+    let newH = !expanded
+    setExpanded(newH);
+    if(newH){
+      setCardHeight(630)
+    }else{
+      setCardHeight(320)
+    }
   };
 
+  const ExpandMore = styled((props) => {
+    const { expand, ...other } = props;
+    return <IconButton {...other} />;
+  })(({ theme, expand }) => ({
+    transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+  }));
+
+  const {monday,tuesday,wednesday,thursday,friday,saturday,sunday} = item.days
+  const error = [
+    monday,
+    tuesday,
+    wednesday,
+    thursday,
+    friday,
+    saturday,
+    sunday
+  ].filter((v) => v).length < 1;
+
+
   return (
-    <Card sx={{ width: 345, marginTop:"100px" }}>
+    <Card sx={{ width: 345, margin:"25px", height:'auto', height:cardheight }}>
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -42,56 +66,90 @@ export default function MenuCard({item}) {
           </Avatar>
         }
         action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
+          <IconButton onClick={()=>makeChanges(null,'delete',id)} aria-label="delete">
+            <DeleteIcon />
           </IconButton>
         }
-        title={item.title}
+        title={item.name}
         subheader={"by "+ item.author}
       />
       <CardMedia
         component="img"
         height="194"
-        image={item.image}
+        image={item.displayImg}
         alt={item.name}
       />
       <CardActions disableSpacing>
-        <ExpandMore
-          expand={expanded}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
-        >
-          <ExpandMoreIcon />
-        </ExpandMore>
+        <Button onClick={()=>setShowRecipie(item.url)} variant="contained">Show Recipie</Button>
+        <Stack sx={{display:'flex', justifyContent:'center', alignItems:'center', marginLeft:'90px'}} direction="row" spacing={0}>
+          <Typography>Schedule</Typography>
+          <ExpandMore
+            expand={expanded}
+            onClick={handleExpandClick}
+            aria-expanded={expanded}
+            aria-label="show more"
+          >
+            <ExpandMoreIcon />
+          </ExpandMore>
+        </Stack>
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          <Typography paragraph>Method:</Typography>
-          <Typography paragraph>
-            Heat 1/2 cup of the broth in a pot until simmering, add saffron and set
-            aside for 10 minutes.
-          </Typography>
-          <Typography paragraph>
-            Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet over
-            medium-high heat. Add chicken, shrimp and chorizo, and cook, stirring
-            occasionally until lightly browned, 6 to 8 minutes. Transfer shrimp to a
-            large plate and set aside, leaving chicken and chorizo in the pan. Add
-            pimentón, bay leaves, garlic, tomatoes, onion, salt and pepper, and cook,
-            stirring often until thickened and fragrant, about 10 minutes. Add
-            saffron broth and remaining 4 1/2 cups chicken broth; bring to a boil.
-          </Typography>
-          <Typography paragraph>
-            Add rice and stir very gently to distribute. Top with artichokes and
-            peppers, and cook without stirring, until most of the liquid is absorbed,
-            15 to 18 minutes. Reduce heat to medium-low, add reserved shrimp and
-            mussels, tucking them down into the rice, and cook again without
-            stirring, until mussels have opened and rice is just tender, 5 to 7
-            minutes more. (Discard any mussels that don&apos;t open.)
-          </Typography>
-          <Typography>
-            Set aside off of the heat to let rest for 10 minutes, and then serve.
-          </Typography>
+        <FormControl
+          required
+          error={error}
+          component="fieldset"
+          sx={{ m: 3 }}
+          variant="standard"
+        >
+          <FormLabel component="legend">Pick a day</FormLabel>
+            <FormGroup>
+                <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap flexWrap="wrap">
+                <FormControlLabel
+                    control={
+                        <Checkbox checked={monday} onChange={(e)=>makeChanges(e,'day', id)} name="monday" />
+                    }
+                    label="Monday"
+                />
+                <FormControlLabel
+                    control={
+                        <Checkbox checked={tuesday} onChange={(e)=>makeChanges(e,'day', id)} name="tuesday" />
+                    }
+                    label="Tuesday"
+                />
+                <FormControlLabel
+                    control={
+                        <Checkbox checked={wednesday} onChange={(e)=>makeChanges(e,'day', id)} name="wednesday" />
+                    }
+                    label="Wednesday"
+                />
+                <FormControlLabel
+                    control={
+                        <Checkbox checked={thursday} onChange={(e)=>makeChanges(e,'day', id)} name="thursday" />
+                    }
+                    label="Thursday"
+                />
+                <FormControlLabel
+                    control={
+                        <Checkbox checked={friday} onChange={(e)=>makeChanges(e,'day', id)} name="friday" />
+                    }
+                    label="Friday"
+                />
+                <FormControlLabel
+                    control={
+                        <Checkbox checked={saturday} onChange={(e)=>makeChanges(e,'day', id)} name="saturday" />
+                    }
+                    label="Saturday"
+                />
+                <FormControlLabel
+                    control={
+                        <Checkbox checked={sunday} onChange={(e)=>makeChanges(e,'day', id)} name="sunday" />
+                    }
+                    label="Sunday"
+                />
+                </Stack>
+            </FormGroup>
+          </FormControl>
         </CardContent>
       </Collapse>
     </Card>

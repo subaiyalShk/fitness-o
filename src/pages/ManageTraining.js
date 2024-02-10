@@ -111,7 +111,11 @@ const ManageTraining = () => {
             }
             setAllChanges([...newChanges])
         }else if(type === 'delete'){
-            newChanges[index].status = 'deleted'
+            if(newChanges[index].status==='new'){
+                newChanges.splice(index, 1)
+            }else{
+                newChanges[index].status = 'delete'
+            }
             setAllChanges([...newChanges])
         }else if(type==='add'){
             newChanges.push({...newWorkout})
@@ -272,7 +276,6 @@ const ManageTraining = () => {
                         </Paper>
                     </Box>
                     {allChanges.map((workout, index) => {
-                        console.log('each workout',workout)
                         const {
                             monday, 
                             tuesday, 
@@ -282,7 +285,7 @@ const ManageTraining = () => {
                             saturday, 
                             sunday
                         } = workout?.days;
-                        if(workout.status === 'deleted')return null;
+                        if(workout.status === 'delete')return null;
                         else return(
                             <Card sx={{margin:'10px', maxWidth:'400px'}} key={index}>
                                 <CardHeader

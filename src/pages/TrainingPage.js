@@ -9,8 +9,8 @@ import Checkbox from '@mui/material/Checkbox';
 import { AppCTX } from '../Data/AppData'
 
 const TrainingPage = () => {
-  const {workouts, selectedDay} = useContext(AppCTX);
-  const [filteredWorkouts, setFilteredWorkouts] = useState(workouts)
+  const { workouts, selectedDay } = useContext(AppCTX);
+  const [ filteredWorkouts, setFilteredWorkouts ] = useState(workouts)
   const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
   
   useEffect(() =>{
@@ -26,8 +26,8 @@ const TrainingPage = () => {
           sx={{paddingTop:'100px', paddingBottom:'100px', overflow:'scroll', display:'flex', flexWrap:"wrap", justifyContent:'center'}}
         >
         {filteredWorkouts.map((workout, index) => (
-          <Box >
-            <Card sx={{margin:'10px', width:'300px'}} key={index}>
+          <Box key={index} >
+            <Card sx={{margin:'10px', width:'300px'}} >
               <CardHeader
                 title={workout.name}
               />

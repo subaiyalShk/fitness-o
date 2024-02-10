@@ -1,23 +1,24 @@
 import React, {useState, useContext, useEffect} from 'react';
 import PropTypes from 'prop-types';
-import SwipeableViews from 'react-swipeable-views';
-import { useTheme } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemText from '@mui/material/ListItemText';
-import Avatar from '@mui/material/Avatar';
-import AddBtn from '../components/AddButton'
-import AddMenuItem from './AddMenuItem'
+import Dialog from '@mui/material/Dialog';
+import Toolbar from '@mui/material/Toolbar';
+import Slide from '@mui/material/Slide';
+import AddMenuItem from './AddMenuItem';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 import { AppCTX } from '../Data/AppData'
 import MenuCard from '../components/MenuCard'
-import Container from '@mui/material/Container';
+import Button from '@mui/material/Button'
+import ShowRecipie from './ShowRecipie';
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -53,58 +54,84 @@ function a11yProps(index) {
 }
 
 export default function RecipieBook() {
-    const theme = useTheme();
-    const { menu } = useContext(AppCTX);
-    const [ value, setValue ] = useState(0);
-    const [ add, setAdd ] = useState(false);
+    const { menu, setEditingMode, saveMealPlan } = useContext(AppCTX);
+    const [ allChanges, setAllChanges ] = useState([])
+    const [ selectedTime, setSelectedTime ] = useState(0);
+    const [ open, setOpen ] = useState(true);
+    const [ showRecipie, setShowRecipie ] = useState('')
 
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
+    const saveChanges = async () => {
+        await saveMealPlan([...allChanges])
+        setOpen(false)
+    }
+
+    useEffect(()=>{
+        if(open){
+            setAllChanges([...menu])
+        }else{
+            setAllChanges([]) 
+            setTimeout(()=>setEditingMode(false), 500)
+        }
+    },[menu, open])
+
+    const handleChangeTime = (event, newValue) => {
+        setSelectedTime(newValue);
     };
+    
+    const handleAddMenuItem = (newItem) => {
+        let changes = allChanges
+        changes.push(newItem)
+        setAllChanges([...changes])
+    }
 
-    const handleChangeIndex = (index) => {
-        setValue(index);
-    };
-
-    const MenuList = (props) => {
-        const {items, idx} = props;
-        return(
-            <TabPanel value={value} index={idx} dir={theme.direction}>
-                <Container maxWidth="md">
-                    <Box 
-                        sx={{  
-                            display: 'flex', 
-                            flexWrap:"wrap", 
-                            justifyContent:"space-around" 
-                        }}>
-                        {items.map((item, index) => (
-                            <MenuCard item={item} />
-                        ))}
-                    </Box>
-                </Container>
-                {/* <List>
-                    {items.map(({ primary, secondary, person }, index) => (
-                    <ListItem button key={index + person}>
-                        <ListItemAvatar>
-                        <Avatar alt="Profile Picture" src={person} />
-                        </ListItemAvatar>
-                        <ListItemText primary={primary} secondary={secondary} />
-                    </ListItem>
-                    ))}
-                </List> */}
-            </TabPanel>
-        )
-    }   
+    const makeChanges = (event, type, index) => {
+        let changes = [...allChanges]
+        if(type==='day'){
+            changes[index].days[event.target.name]=event.target.checked
+            if(changes[index].status != 'new'){
+                changes[index].status = 'changed'
+            }
+        }else if(type==='delete'){
+            if(changes[index].status!='new'){
+                changes[index].status='delete'
+            }else{
+                changes.splice(index,1)
+            }
+        }
+        setAllChanges([...changes])
+    }
 
     return (
-        <Box sx={{ bgcolor: '#192327', width: '100%' }}>
+        <Dialog
+            fullScreen
+            open={open}
+            onClose={()=>setOpen(false)}
+            TransitionComponent={Transition}
+        >
+            <AppBar sx={{position: 'relative'}}>
+                <Toolbar>
+                    <IconButton
+                        edge="start"
+                        color="inherit"
+                        onClick={()=>setOpen(false)}
+                        aria-label="close"
+                    >
+                    <CloseIcon />
+                    </IconButton>
+                    <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                        Recipie Book
+                    </Typography>
+                    <Button autoFocus color="inherit" onClick={saveChanges}>
+                        save
+                    </Button>
+                </Toolbar>
+            </AppBar>
             <AppBar position="static">
                 <Tabs
                     id="top-bar"
-                    value={value}
-                    onChange={handleChange}
-                    indicatorColor="secondary"
-                    textColor="#9FD218"
+                    value={selectedTime}
+                    onChange={handleChangeTime}
+                    indicatorColor="primary"
                     variant="fullWidth"
                     aria-label="full width tabs example"
                 >
@@ -113,19 +140,17 @@ export default function RecipieBook() {
                     <Tab label="Dinner" {...a11yProps(2)} />
                 </Tabs>
             </AppBar>
-                <SwipeableViews
-                    axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-                    index={value}
-                    onChangeIndex={handleChangeIndex}
-                >
-                    
-                    <MenuList items={menu.breakfast} idx={0} />
-                    <MenuList items={menu.lunch} idx={1} />
-                    <MenuList items={menu.dinner} idx={2} />
-                </SwipeableViews>
-            <AddBtn onClick={()=>setAdd(true)}/>
-            <AddMenuItem setOpen={setAdd} open={add}/>
-        </Box>
+            <Box sx={{ display:'flex', flexWrap:'wrap', width: '100%', justifyContent:'center' }}>
+            {
+                allChanges.map((meal, idx)=>{
+                    if(meal.status != 'delete'&& meal.time===['breakfast','lunch','dinner'][selectedTime])return( <MenuCard key={idx} id={idx} makeChanges={makeChanges} setShowRecipie={setShowRecipie} item={meal} />)
+                    else return null
+                })
+            }
+            </Box>
+            { showRecipie.length>0 ? <ShowRecipie setUrl={setShowRecipie} url={showRecipie}/> : null}
+            <AddMenuItem add={handleAddMenuItem}/>
+        </Dialog>
     );
 }
 

@@ -26,24 +26,12 @@ export const AppData = (props) => {
     }
 
     const getMenu = async () => {
-        let res = {
-            'breakfast':[],
-            'lunch':[],
-            'dinner':[]
-        };
-        const breakfastList = await getDocs(collection(db, "breakfast"));
-        breakfastList.forEach((doc) => {
-            res['breakfast'].push(doc.data())
+        let res = []
+        const menuBook = await getDocs(collection(db, "RecipieBook"));
+        menuBook.forEach((doc) => {
+            res.push({...doc.data(), id:doc.id });
         });
-        const lunchList = await getDocs(collection(db, "lunch"));
-        lunchList.forEach((doc) => {
-            res['lunch'].push(doc.data())
-        });
-        const dinnerList = await getDocs(collection(db, "dinner"));
-        dinnerList.forEach((doc) => {
-            res['dinner'].push(doc.data())
-        });
-        console.log(res);
+        console.log('menuBook', res);
         setMenu(res)
     }
 
@@ -103,13 +91,37 @@ export const AppData = (props) => {
                 delete newData[index].id
                 console.log('changed Data', newData[index])
                 await setDoc(doc(db, "Workouts", idx), newData[index]);
-            }else if (newData[index].status === 'deleted'){
+            }else if (newData[index].status === 'delete'){
                 // delete existing document in collection called Workouts
                 deleteDoc(doc(db, "Workouts", newData[index].id))
             }
         }
         getWorkouts()
-        
+    }
+
+    const saveMealPlan = async (newData) => {
+        // loop through newData 
+        for (let index in newData) {
+            // if object has no id 
+            console.log('data', newData[index])
+            if (newData[index].status === 'new'){
+                // add new workout to collection called Workouts
+                delete newData[index].status
+                console.log('data added', newData[index])
+                addDoc(collection(db, "RecipieBook"), newData[index])
+            }else if (newData[index].status === 'changed'){
+                // update existing document in collection called Workouts
+                let idx= newData[index].id
+                delete newData[index].status
+                delete newData[index].id
+                console.log('changed Data', newData[index])
+                await setDoc(doc(db, "RecipieBook", idx), newData[index]);
+            }else if (newData[index].status === 'delete'){
+                // delete existing document in collection called Workouts
+                deleteDoc(doc(db, "RecipieBook", newData[index].id))
+            }
+        }
+        getMenu()
     }
 
     
@@ -128,7 +140,8 @@ export const AppData = (props) => {
             setWorkouts,
             editingMode, 
             setEditingMode,
-            saveWorkouts
+            saveWorkouts,
+            saveMealPlan
         }}>
             { props.children }
         </AppCTX.Provider>
